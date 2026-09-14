@@ -30,7 +30,7 @@ Both settings are saved per account.
 
 ## Installation
 
-Download from [CurseForge](https://www.curseforge.com/wow/addons/autoacceptres),
+Download from [CurseForge](https://www.curseforge.com/projects/1695734),
 or clone this repository into
 `World of Warcraft/_retail_/Interface/AddOns/AutoAcceptRes`. There is no build
 step and nothing to embed.
