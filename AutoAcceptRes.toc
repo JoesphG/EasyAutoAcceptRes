@@ -1,0 +1,9 @@
+## Interface: 120100
+## Title: AutoAcceptRes
+## Notes: Accepts resurrection offers automatically.
+## Author: Tristan
+## Version: 1.0.0
+## SavedVariables: AutoAcceptResDB
+## AllowLoadGameType: mainline
+
+AutoAcceptRes.lua
