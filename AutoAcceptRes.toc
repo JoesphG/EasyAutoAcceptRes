@@ -6,7 +6,7 @@
 ## SavedVariables: AutoAcceptResDB
 ## Category-enUS: Quality of Life
 ## AllowLoadGameType: mainline
-## IconTexture: Interface\Icons\Spell_Holy_Resurrection
+## IconTexture: Interface\AddOns\AutoAcceptRes\icon.tga
 ## X-License: MIT
 ## X-Website: https://github.com/JoesphG/AutoAcceptRes
 

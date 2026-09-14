@@ -65,10 +65,10 @@ jobs:
         run: |
           set -e
           pkg=".release/AutoAcceptRes"
-          for f in AutoAcceptRes.toc AutoAcceptRes.lua; do
+          for f in AutoAcceptRes.toc icon.tga AutoAcceptRes.lua; do
             test -f "$pkg/$f" || { echo "::error::missing $f in package"; exit 1; }
           done
-          for f in .pkgmeta README.md tests .github Makefile; do
+          for f in .pkgmeta README.md images tests .github Makefile; do
             test ! -e "$pkg/$f" || { echo "::error::$f should not be packaged"; exit 1; }
           done
           echo "Package contents OK"
