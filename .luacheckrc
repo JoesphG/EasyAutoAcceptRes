@@ -28,5 +28,8 @@ read_globals = wow_api
 -- The stubs define the client API, so there it is writable.
 files["tests/"] = {
     globals = wow_api,
-    ignore = { "212" }, -- stub signatures mirror Blizzard's, unused args and all
+    ignore = {
+        "212", -- stub signatures mirror Blizzard's, unused args and all
+        "121/print", -- replaced to capture the addon's output
+    },
 }
