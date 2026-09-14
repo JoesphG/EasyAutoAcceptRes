@@ -1,90 +1,92 @@
 """Renders icon.tga and the CurseForge avatar. Needs Pillow.
 
-A gold tick in a column of holy light: the resurrection accepted for you.
+A gold ankh, the life symbol, on deep teal with rays behind it.
 """
 
 from PIL import Image, ImageDraw, ImageFilter
-
-BG_MID = (44, 30, 84)
-BG_DEEP = (8, 6, 16)
+import math
 IRON = (74, 74, 88)
-LIGHT = (255, 236, 170)
-GOLD = (244, 190, 64)
-GOLD_HI = (255, 244, 196)
-GOLD_LO = (120, 78, 18)
-
 
 def lerp(a, b, t):
     return tuple(int(a[i] + (b[i] - a[i]) * t) for i in range(3))
 
-
-def render(N, S=8, pad=0.47):
-    P = N * S
-    c = P / 2
-
-    def canvas():
-        return Image.new("RGBA", (P, P), (0, 0, 0, 0))
-
-    def glow(fn, blur, alpha):
-        g = canvas()
-        fn(ImageDraw.Draw(g))
+class Ctx:
+    def __init__(self, N, S=8, pad=0.47):
+        self.N, self.S, self.pad = N, S, pad
+        self.P = N * S
+        self.c = self.P / 2
+        self.img = self.canvas()
+    def canvas(self):
+        return Image.new("RGBA", (self.P, self.P), (0, 0, 0, 0))
+    def bg(self, mid, deep, power=0.8):
+        d = ImageDraw.Draw(self.img); c, P = self.c, self.P
+        for i in range(200, 0, -1):
+            t = i / 200; r = P * self.pad * t
+            d.ellipse([c - r, c - r, c + r, c + r], fill=lerp(mid, deep, t ** power) + (255,))
+    def glow(self, fn, blur, alpha):
+        g = self.canvas(); fn(ImageDraw.Draw(g))
         g = g.filter(ImageFilter.GaussianBlur(blur))
         g.putalpha(g.split()[3].point(lambda v: int(v * alpha)))
-        return g
-
-    def clip_circle(img, r):
+        self.img.alpha_composite(g)
+    def clip(self, img, r=None):
+        r = r or self.P * self.pad * 0.955; c, P = self.c, self.P
         m = Image.new("L", (P, P), 0)
         ImageDraw.Draw(m).ellipse([c - r, c - r, c + r, c + r], fill=255)
         img.putalpha(Image.composite(img.split()[3], Image.new("L", (P, P), 0), m))
         return img
+    def bezel(self, col=IRON):
+        d = ImageDraw.Draw(self.img); c, P, pad = self.c, self.P, self.pad
+        d.ellipse([c - P * pad, c - P * pad, c + P * pad, c + P * pad], outline=col + (255,), width=int(P * 0.034))
+        r = P * pad * 0.962
+        d.ellipse([c - r, c - r, c + r, c + r], outline=lerp(col, (0, 0, 0), 0.55) + (210,), width=int(P * 0.013))
+    def out(self):
+        return self.img.resize((self.N, self.N), Image.LANCZOS)
 
-    img = canvas()
-    d = ImageDraw.Draw(img)
-    for i in range(200, 0, -1):
-        t = i / 200
-        r = P * pad * t
-        d.ellipse([c - r, c - r, c + r, c + r], fill=lerp(BG_MID, BG_DEEP, t**0.8) + (255,))
+def skull(d, cx, cy, r, col, dark):
+    # cranium
+    d.ellipse([cx - r, cy - r * 1.05, cx + r, cy + r * 0.55], fill=col)
+    # jaw
+    d.rounded_rectangle([cx - r * 0.62, cy + r * 0.1, cx + r * 0.62, cy + r * 0.95], radius=r * 0.22, fill=col)
+    # cheek notches
+    d.polygon([(cx - r, cy + r * 0.25), (cx - r * 0.62, cy + r * 0.25), (cx - r * 0.62, cy + r * 0.7)], fill=dark)
+    d.polygon([(cx + r, cy + r * 0.25), (cx + r * 0.62, cy + r * 0.25), (cx + r * 0.62, cy + r * 0.7)], fill=dark)
+    # eyes
+    er = r * 0.3
+    for ex in (cx - r * 0.42, cx + r * 0.42):
+        d.ellipse([ex - er, cy - r * 0.35 - er * 0.9, ex + er, cy - r * 0.35 + er * 0.9], fill=dark)
+    # nose
+    d.polygon([(cx, cy + r * 0.05), (cx - r * 0.14, cy + r * 0.35), (cx + r * 0.14, cy + r * 0.35)], fill=dark)
+    # teeth lines
+    for tx in (-0.3, -0.1, 0.1, 0.3):
+        d.rectangle([cx + r * tx - r * 0.025, cy + r * 0.6, cx + r * tx + r * 0.025, cy + r * 0.95], fill=dark)
 
-    # column of light, widening as it rises
-    beam = canvas()
-    bd = ImageDraw.Draw(beam)
-    top, bot = P * 0.04, P * 0.96
-    for i in range(60):
-        t = i / 60
-        y = top + (bot - top) * t
-        w = P * (0.30 - 0.22 * t)
-        a = int(150 * (1 - abs(t - 0.45) * 1.6))
-        bd.rectangle([c - w, y, c + w, y + (bot - top) / 60 + 1], fill=LIGHT + (max(a, 0),))
-    beam = beam.filter(ImageFilter.GaussianBlur(P * 0.05))
-    img.alpha_composite(clip_circle(beam, P * pad * 0.955))
-    img.alpha_composite(
-        glow(lambda g: g.ellipse([c - P * 0.2, c - P * 0.2, c + P * 0.2, c + P * 0.2], fill=GOLD + (255,)), P * 0.09, 0.7)
-    )
-
-    # tick
+def render(N, S=8):
+    x = Ctx(N, S)
+    c, P = x.c, x.P
+    x.bg((10, 66, 70), (3, 10, 12))
+    GOLD, GOLD_HI, GOLD_LO = (244, 196, 70), (255, 246, 205), (120, 82, 18)
     w = P * 0.11
-    pts = [(c - P * 0.30, c + P * 0.02), (c - P * 0.09, c + P * 0.24), (c + P * 0.32, c - P * 0.24)]
-
-    def tick(d, off, col, width):
-        d.line([(x + off[0], y + off[1]) for x, y in pts], fill=col, width=int(width), joint="curve")
-        for x, y in (pts[0], pts[2]):
-            d.ellipse([x + off[0] - width / 2, y + off[1] - width / 2, x + off[0] + width / 2, y + off[1] + width / 2], fill=col)
-
-    img.alpha_composite(glow(lambda g: tick(g, (0, 0), GOLD_HI + (255,), w * 1.3), P * 0.035, 0.9))
-    d = ImageDraw.Draw(img)
-    tick(d, (0, P * 0.03), (0, 0, 0, 160), w)
-    tick(d, (0, 0), GOLD_LO + (255,), w)
-    tick(d, (0, -w * 0.18), GOLD + (255,), w * 0.72)
-    tick(d, (0, -w * 0.30), GOLD_HI + (255,), w * 0.24)
-
-    # bezel
-    d.ellipse([c - P * pad, c - P * pad, c + P * pad, c + P * pad], outline=IRON + (255,), width=int(P * 0.034))
-    d.ellipse(
-        [c - P * pad * 0.962, c - P * pad * 0.962, c + P * pad * 0.962, c + P * pad * 0.962],
-        outline=lerp(IRON, (0, 0, 0), 0.55) + (210,),
-        width=int(P * 0.013),
-    )
-    return img.resize((N, N), Image.LANCZOS)
+    def ankh(g, col, width, off=(0, 0)):
+        ox, oy = off
+        # loop
+        g.ellipse([c - P * 0.17 + ox, c - P * 0.42 + oy, c + P * 0.17 + ox, c - P * 0.06 + oy], outline=col, width=int(width))
+        # stem
+        g.rounded_rectangle([c - width / 2 + ox, c - P * 0.10 + oy, c + width / 2 + ox, c + P * 0.42 + oy], radius=width * 0.3, fill=col)
+        # arms
+        g.rounded_rectangle([c - P * 0.30 + ox, c - P * 0.05 - width / 2 + oy, c + P * 0.30 + ox, c - P * 0.05 + width / 2 + oy], radius=width * 0.3, fill=col)
+    x.glow(lambda g: ankh(g, GOLD_HI + (255,), w * 1.5), P * 0.05, 0.9)
+    # radiating light
+    rays = x.canvas(); rd = ImageDraw.Draw(rays)
+    for i in range(12):
+        a = i * math.pi / 6 + math.pi / 12
+        rd.polygon([(c, c), (c + P * 0.6 * math.cos(a - 0.09), c + P * 0.6 * math.sin(a - 0.09)), (c + P * 0.6 * math.cos(a + 0.09), c + P * 0.6 * math.sin(a + 0.09))], fill=(255, 240, 180, 60))
+    x.img.alpha_composite(x.clip(rays.filter(ImageFilter.GaussianBlur(P * 0.02))))
+    d = ImageDraw.Draw(x.img)
+    ankh(d, (0, 0, 0, 170), w, (0, P * 0.03))
+    ankh(d, GOLD_LO + (255,), w)
+    ankh(d, GOLD + (255,), w * 0.62, (0, -w * 0.12))
+    ankh(d, GOLD_HI + (255,), w * 0.2, (0, -w * 0.28))
+    x.bezel(); return x.out()
 
 
 icon = render(128)
