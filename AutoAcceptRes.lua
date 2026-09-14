@@ -65,8 +65,12 @@ f:SetScript("OnEvent", function(_, event, arg1)
     end
 
     if event == "RESURRECT_REQUEST" then
-        if not AutoAcceptResDB.enabled then return end
-        if CombatIsHappening() then return end
+        if not AutoAcceptResDB.enabled then
+            return
+        end
+        if CombatIsHappening() then
+            return
+        end
         Accept()
     end
 end)
