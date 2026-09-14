@@ -64,8 +64,8 @@ jobs:
         if: steps.tagged.outputs.skip != 'true'
         run: |
           set -e
-          pkg=".release/AutoAcceptRes"
-          for f in AutoAcceptRes.toc icon.tga AutoAcceptRes.lua; do
+          pkg=".release/EasyAutoAcceptRes"
+          for f in EasyAutoAcceptRes.toc icon.tga AutoAcceptRes.lua; do
             test -f "$pkg/$f" || { echo "::error::missing $f in package"; exit 1; }
           done
           for f in .pkgmeta README.md images tests .github Makefile; do

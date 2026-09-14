@@ -1,4 +1,4 @@
-package-as: AutoAcceptRes
+package-as: EasyAutoAcceptRes
 
 # Release notes come from the hand-written changelog, not commit messages.
 manual-changelog: CHANGELOG.md

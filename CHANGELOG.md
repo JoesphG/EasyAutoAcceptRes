@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+- Renamed to EasyAutoAcceptRes, the CurseForge project name. The folder changes,
+  so the two settings reset once.
+
 ## 1.0.0
 
 First public release, for Midnight 12.1 (Interface 120100).

@@ -1,4 +1,4 @@
-# AutoAcceptRes
+# EasyAutoAcceptRes
 
 Accepts resurrection offers in World of Warcraft the moment they arrive, so a
 wipe recovery is one click shorter for everyone waiting on you.
@@ -32,7 +32,7 @@ Both settings are saved per account.
 
 Download from [CurseForge](https://www.curseforge.com/projects/1695734),
 or clone this repository into
-`World of Warcraft/_retail_/Interface/AddOns/AutoAcceptRes`. There is no build
+`World of Warcraft/_retail_/Interface/AddOns/EasyAutoAcceptRes`. There is no build
 step and nothing to embed.
 
 ## Support
@@ -41,7 +41,7 @@ Bugs, questions and ideas all go to Discord: **https://discord.gg/zHT3bGEQ52**
 
 `#support` for bugs and help, `#ideas` for feature requests, `#announcements`
 for release notes. The
-[GitHub issue tracker](https://github.com/JoesphG/AutoAcceptRes/issues) works
+[GitHub issue tracker](https://github.com/JoesphG/EasyAutoAcceptRes/issues) works
 too.
 
 A bug report gets fixed faster with:

@@ -60,7 +60,7 @@ print = function(...)
     printed[#printed + 1] = table.concat(t, " ")
 end
 
-assert(loadfile(FILE))("AutoAcceptRes")
+assert(loadfile(FILE))("EasyAutoAcceptRes")
 
 local out = io.write
 local fails = 0
@@ -72,7 +72,7 @@ local function check(n, ok, extra)
         out("  FAIL " .. n .. (extra and (" -- " .. tostring(extra)) or "") .. "\n")
     end
 end
-out("AutoAcceptRes test\n")
+out("EasyAutoAcceptRes test\n")
 
 check("registered both events", frame.events.ADDON_LOADED and frame.events.RESURRECT_REQUEST)
 
@@ -80,7 +80,7 @@ check("registered both events", frame.events.ADDON_LOADED and frame.events.RESUR
 frame.OnEvent(frame, "ADDON_LOADED", "SomeOtherAddon")
 check("ignores another addon loading", AutoAcceptResDB == nil)
 
-frame.OnEvent(frame, "ADDON_LOADED", "AutoAcceptRes")
+frame.OnEvent(frame, "ADDON_LOADED", "EasyAutoAcceptRes")
 check("defaults on", AutoAcceptResDB.enabled == true)
 
 local function res()
@@ -128,7 +128,7 @@ state.combat.raid17 = false
 
 -- A profile from before the setting existed gets the default, not nil.
 AutoAcceptResDB.inCombat = nil
-frame.OnEvent(frame, "ADDON_LOADED", "AutoAcceptRes")
+frame.OnEvent(frame, "ADDON_LOADED", "EasyAutoAcceptRes")
 check("old profile gets combat off", AutoAcceptResDB.inCombat == false)
 
 SlashCmdList.AUTOACCEPTRES("nonsense")

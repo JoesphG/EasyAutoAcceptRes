@@ -5,7 +5,7 @@ is pasted by hand into the Description editor with the format set to Markdown.
 
 **Accepts your resurrection the moment it arrives.**
 
-AutoAcceptRes takes a resurrection offer and closes the popup, so a wipe
+EasyAutoAcceptRes takes a resurrection offer and closes the popup, so a wipe
 recovery is one click shorter for everyone waiting on you. Two files, no
 libraries, two commands.
 
@@ -38,7 +38,7 @@ Bugs, questions and ideas all go to Discord: **[discord.gg/zHT3bGEQ52](https://d
 
 `#support` for bugs and help, `#ideas` for feature requests, `#announcements`
 for release notes. The
-[GitHub issue tracker](https://github.com/JoesphG/AutoAcceptRes/issues) works
+[GitHub issue tracker](https://github.com/JoesphG/EasyAutoAcceptRes/issues) works
 too.
 
 A bug report gets fixed faster with:
@@ -55,4 +55,4 @@ Lua error (if any):
 If there is a Lua error, paste the full text from BugSack rather than the
 first line.
 
-Source: [github.com/JoesphG/AutoAcceptRes](https://github.com/JoesphG/AutoAcceptRes) — MIT licensed.
+Source: [github.com/JoesphG/EasyAutoAcceptRes](https://github.com/JoesphG/EasyAutoAcceptRes) — MIT licensed.

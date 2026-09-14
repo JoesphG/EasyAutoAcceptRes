@@ -1,14 +1,14 @@
 ## Interface: 120100
-## Title: AutoAcceptRes
+## Title: EasyAutoAcceptRes
 ## Notes: Accepts resurrection offers automatically. A battle res only if you ask.
 ## Author: JoesphG
-## Version: 1.0.0
+## Version: 1.0.1
 ## SavedVariables: AutoAcceptResDB
 ## X-Curse-Project-ID: 1695734
 ## Category-enUS: Quality of Life
 ## AllowLoadGameType: mainline
-## IconTexture: Interface\AddOns\AutoAcceptRes\icon.tga
+## IconTexture: Interface\AddOns\EasyAutoAcceptRes\icon.tga
 ## X-License: MIT
-## X-Website: https://github.com/JoesphG/AutoAcceptRes
+## X-Website: https://github.com/JoesphG/EasyAutoAcceptRes
 
 AutoAcceptRes.lua

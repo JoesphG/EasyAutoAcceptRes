@@ -80,11 +80,11 @@ SlashCmdList.AUTOACCEPTRES = function(msg)
     msg = (msg or ""):lower():match("^%s*(.-)%s*$")
     if msg == "" or msg == "toggle" then
         AutoAcceptResDB.enabled = not AutoAcceptResDB.enabled
-        print("AutoAcceptRes: " .. (AutoAcceptResDB.enabled and "on" or "off") .. ".")
+        print("EasyAutoAcceptRes: " .. (AutoAcceptResDB.enabled and "on" or "off") .. ".")
     elseif msg == "combat" then
         AutoAcceptResDB.inCombat = not AutoAcceptResDB.inCombat
-        print("AutoAcceptRes: battle res " .. (AutoAcceptResDB.inCombat and "accepted" or "left to you") .. ".")
+        print("EasyAutoAcceptRes: battle res " .. (AutoAcceptResDB.inCombat and "accepted" or "left to you") .. ".")
     else
-        print("AutoAcceptRes: /aar toggles, /aar combat toggles accepting a battle res.")
+        print("EasyAutoAcceptRes: /aar toggles, /aar combat toggles accepting a battle res.")
     end
 end
