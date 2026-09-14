@@ -1,6 +1,6 @@
 ## Interface: 120100
 ## Title: AutoAcceptRes
-## Notes: Accepts resurrection offers automatically. Never a battle res.
+## Notes: Accepts resurrection offers automatically. A battle res only if you ask.
 ## Author: JoesphG
 ## Version: 1.0.0
 ## SavedVariables: AutoAcceptResDB
