@@ -4,6 +4,7 @@
 ## Author: JoesphG
 ## Version: 1.0.0
 ## SavedVariables: AutoAcceptResDB
+## X-Curse-Project-ID: 1695734
 ## Category-enUS: Quality of Life
 ## AllowLoadGameType: mainline
 ## IconTexture: Interface\AddOns\AutoAcceptRes\icon.tga
