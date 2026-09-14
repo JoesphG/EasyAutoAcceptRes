@@ -1,4 +1,4 @@
--- Accepts resurrection offers automatically, but never a battle res.
+-- Accepts resurrection offers automatically. A battle res only when asked to.
 --
 -- RESURRECT_REQUEST fires for a caster's resurrect, in and out of combat. The
 -- popup is raised by Blizzard's own handler, so it is hidden after accepting
@@ -18,8 +18,8 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:RegisterEvent("RESURRECT_REQUEST")
 
--- Taking a battle res is a call about positioning and cooldowns that only the
--- player can make, so it is never automatic and there is no setting for it.
+-- Taking a battle res is a call about positioning and cooldowns, so it is off
+-- unless /aar combat turns it on.
 --
 -- InCombatLockdown() is not enough on its own: a dead player is out of combat,
 -- which is precisely the battle res case. IsEncounterInProgress covers a boss
@@ -58,9 +58,9 @@ f:SetScript("OnEvent", function(_, event, arg1)
         if AutoAcceptResDB.enabled == nil then
             AutoAcceptResDB.enabled = true
         end
-        -- Retired setting. Cleared so an old profile cannot re-enable a
-        -- behaviour that no longer exists.
-        AutoAcceptResDB.inCombat = nil
+        if AutoAcceptResDB.inCombat == nil then
+            AutoAcceptResDB.inCombat = false
+        end
         return
     end
 
@@ -68,7 +68,7 @@ f:SetScript("OnEvent", function(_, event, arg1)
         if not AutoAcceptResDB.enabled then
             return
         end
-        if CombatIsHappening() then
+        if CombatIsHappening() and not AutoAcceptResDB.inCombat then
             return
         end
         Accept()
@@ -81,7 +81,10 @@ SlashCmdList.AUTOACCEPTRES = function(msg)
     if msg == "" or msg == "toggle" then
         AutoAcceptResDB.enabled = not AutoAcceptResDB.enabled
         print("AutoAcceptRes: " .. (AutoAcceptResDB.enabled and "on" or "off") .. ".")
+    elseif msg == "combat" then
+        AutoAcceptResDB.inCombat = not AutoAcceptResDB.inCombat
+        print("AutoAcceptRes: battle res " .. (AutoAcceptResDB.inCombat and "accepted" or "left to you") .. ".")
     else
-        print("AutoAcceptRes: /aar toggles. A battle res is never auto-accepted.")
+        print("AutoAcceptRes: /aar toggles, /aar combat toggles accepting a battle res.")
     end
 end

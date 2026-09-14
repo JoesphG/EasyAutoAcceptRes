@@ -92,7 +92,8 @@ end
 check("accepts out of combat", res() == true)
 check("hides every popup name", hidden.RESURRECT and hidden.RESURRECT_NO_SICKNESS and hidden.RESURRECT_NO_TIMER)
 
--- A battle res is never accepted, and there is no setting that can change it.
+-- A battle res is refused unless asked for.
+check("battle res off by default", AutoAcceptResDB.inCombat == false)
 state.lockdown = true
 check("refuses in combat lockdown", res() == false)
 state.lockdown = false
@@ -112,20 +113,27 @@ check("accepts once the pull is over", res() == true)
 state.inRaid, state.members = true, 25
 state.exists.raid17, state.combat.raid17 = true, true
 check("scans the raid, not just the party", res() == false)
+
+-- /aar combat opens the door to a battle res, and only that.
+SlashCmdList.AUTOACCEPTRES("combat")
+check("/aar combat turns it on", AutoAcceptResDB.inCombat == true)
+check("accepts a battle res when asked to", res() == true)
+state.lockdown = true
+check("in lockdown too", res() == true)
+state.lockdown = false
+SlashCmdList.AUTOACCEPTRES("combat")
+check("/aar combat turns it off again", AutoAcceptResDB.inCombat == false)
+check("and the refusal is back", res() == false)
 state.combat.raid17 = false
 
--- The retired setting cannot bring the behaviour back.
-AutoAcceptResDB.inCombat = true
-state.lockdown = true
-check("an old profile's inCombat is powerless", res() == false)
+-- A profile from before the setting existed gets the default, not nil.
+AutoAcceptResDB.inCombat = nil
 frame.OnEvent(frame, "ADDON_LOADED", "AutoAcceptRes")
-check("and is cleared on load", AutoAcceptResDB.inCombat == nil)
-state.lockdown = false
+check("old profile gets combat off", AutoAcceptResDB.inCombat == false)
 
--- /aar combat is gone.
-SlashCmdList.AUTOACCEPTRES("combat")
-check("/aar combat says no", printed[#printed]:find("never auto%-accepted") ~= nil, printed[#printed])
-check("and changed nothing", AutoAcceptResDB.inCombat == nil and AutoAcceptResDB.enabled == true)
+SlashCmdList.AUTOACCEPTRES("nonsense")
+check("unknown command prints help", printed[#printed]:find("/aar combat") ~= nil, printed[#printed])
+check("and changed nothing", AutoAcceptResDB.inCombat == false and AutoAcceptResDB.enabled == true)
 
 SlashCmdList.AUTOACCEPTRES("")
 check("slash turns it off", AutoAcceptResDB.enabled == false)
